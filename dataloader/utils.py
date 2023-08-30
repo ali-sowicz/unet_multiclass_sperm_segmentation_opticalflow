@@ -4,7 +4,7 @@ import uuid
 import PIL.Image
 import PIL.ImageDraw
 
-PATH_PARAMETERS = '../params.json'
+PATH_PARAMETERS = '../config.json'
 
 def shapes_to_label(img_shape, shapes, label_name_to_value):
     cls = np.zeros(img_shape[:2], dtype=np.int32)

@@ -46,6 +46,34 @@ def eval_net_loader(net, val_loader, n_classes, device='cpu'):
     
     return class_iou, mean_iou
 
+def eval_net_loader_sequence(net, val_loader, n_classes, device='cpu'):
+    
+    net.eval()
+    labels = np.arange(n_classes)
+    cm = np.zeros((n_classes,n_classes))
+      
+    for i, sample_batch in enumerate(val_loader):
+        imgs = sample_batch['image']
+        true_masks = sample_batch['mask']
+        
+        for j in range(len(imgs)):
+
+            img = imgs[j].to(device)
+            true_mask = true_masks[j].float().unsqueeze(1).to(device)
+
+            outputs = net(img)
+            probs = torch.softmax(outputs, dim=1)
+            preds = torch.argmax(probs, dim=1)
+            
+            for k in range(len(true_mask)): 
+                true = true_mask[k].cpu().detach().numpy().flatten()
+                pred = preds[k].cpu().detach().numpy().flatten()
+                cm += confusion_matrix(true, pred, labels=labels)
+        
+    class_iou, mean_iou = compute_IoU(cm)
+    
+    return class_iou, mean_iou
+
 def IoU(mask_true, mask_pred, n_classes=2):
         
         labels = np.arange(n_classes)

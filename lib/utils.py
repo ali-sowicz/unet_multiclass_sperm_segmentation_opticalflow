@@ -23,12 +23,12 @@ def mask2rgb(mask):
     return rgb
 
 def rgb2mask(rgb):
-    
+    if len(rgb.shape) == 2:
+         return rgb
     mask = np.zeros((rgb.shape[0], rgb.shape[1]))
 
     for k,v in LABEL_TO_COLOR.items():
         mask[np.all(rgb==v, axis=2)] = k
-        
     return mask
 
 def save_images(export_dir, data):

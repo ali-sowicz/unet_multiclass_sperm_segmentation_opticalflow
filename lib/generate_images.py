@@ -7,7 +7,7 @@ import json
 
 from .utils import mask2rgb
 
-PATH_PARAMETERS = '../params.json'
+PATH_PARAMETERS = '../config.json'
 
 
 def make_background(img_w, img_h, mean=0.8, std=0.05, clip_min=0.6, clip_max=1.0):

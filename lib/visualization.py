@@ -4,6 +4,7 @@ import cv2
 
 from lib.utils import mask2rgb
 
+import warnings
 
 def make_tile(path_image, path_mask, tile_size):
 
@@ -53,12 +54,14 @@ def plot_patches(complete_image, tile_size, index=0, n_rows=8):
     plt.show()
 
 def plot_net_predictions(imgs, true_masks, masks_pred, batch_size):
-    
+    # warnings.filterwarnings("ignore")
+
     fig, ax = plt.subplots(3, batch_size, figsize=(20, 15))
     
     for i in range(batch_size):
         
         img  = np.transpose(imgs[i].squeeze().cpu().detach().numpy(), (1,2,0))
+        img = img[:,:,:3]
         mask_pred = masks_pred[i].cpu().detach().numpy()
         mask_true = true_masks[i].cpu().detach().numpy()
     
@@ -69,3 +72,24 @@ def plot_net_predictions(imgs, true_masks, masks_pred, batch_size):
         ax[2,i].set_title('Ground truth')
         
     return fig
+
+# def plot_net_predictions_sequence(imgs, true_masks, masks_pred, batch_size):
+#     # warnings.filterwarnings("ignore")
+
+#     fig, ax = plt.subplots(3, batch_size, figsize=(20, 15))
+    
+#     for j in range(batch_size):
+#         for i in range(len(imgs)):
+        
+#             img  = np.transpose(imgs[i][j].squeeze().cpu().detach().numpy(), (1,2,0))
+#             img = img[:,:,:3]
+#             mask_pred = masks_pred[i][j].cpu().detach().numpy()
+#             mask_true = true_masks[i][j].cpu().detach().numpy()
+        
+#             ax[0,i].imshow(img)
+#             ax[1,i].imshow(mask2rgb(mask_pred))
+#             ax[1,i].set_title('Predicted')
+#             ax[2,i].imshow(mask2rgb(mask_true))
+#             ax[2,i].set_title('Ground truth')
+        
+#     return fig

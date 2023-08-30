@@ -4,7 +4,7 @@ import cv2
 from pathlib import Path
 import numpy as np
 from PIL import Image
-
+import torch
 from lib.utils import mask2rgb, make_image_dir
 
 
@@ -15,7 +15,7 @@ def random_patches(image, mask, n=1000, patch_h=48, patch_w=48):
     
     Inputs:
         image : array 
-            grayscale or RGB image
+            grayscale or RGB image [H,W,C]
         mask : array 
             RGB image
         n : int
@@ -31,7 +31,14 @@ def random_patches(image, mask, n=1000, patch_h=48, patch_w=48):
         patch_masks : list[array]
             mask of extracted patches
     '''
+    if len(image.shape) == 3:
+        if image.shape[0] < image.shape[2]:
+            image = np.transpose(image, (1,2,0)) # Channels, Height, Width
+            # mask = np.transpose(mask, (1,2,0))
+        # else:
+        #     return 'HWC'  # Height, Width, Channels
     
+
     img_h, img_w = image.shape[:2]
 
     patches = []
@@ -44,7 +51,7 @@ def random_patches(image, mask, n=1000, patch_h=48, patch_w=48):
 
         patch = image[y_center-int(patch_h/2):y_center+int(patch_h/2),x_center-int(patch_w/2):x_center+int(patch_w/2)]
         patch_mask = mask[y_center-int(patch_h/2):y_center+int(patch_h/2),x_center-int(patch_w/2):x_center+int(patch_w/2)]
-            
+        # patch = np.transpose(patch, (2,0,1))
         patches.append(patch)
         patch_masks.append(patch_mask)
             
@@ -72,12 +79,12 @@ def input_filled_mirroring(x, e = 10):
     y[e + h:2 * e + h, 0:2 * e + w] = np.flip(y[h:e + h, 0:2 * e + w], 0)  # flip horizontally
     return y
 
-def augment_rectangular(data):
-    '''agument annotation masks with all combinations of flipping up&down and left&right
+def augment_rectangular_temp(data):
+    '''augument annotation masks with all combinations of flipping up&down and left&right
 
     Inputs:
         data : tuple[list]
-            list of patch images and masks
+            list of patch images and masks [H,W,C]
     
     Outputs:
         data_aug : tuple[list]
@@ -97,6 +104,37 @@ def augment_rectangular(data):
         data_aug.extend([(patch,mask), (patch_lr,mask_lr), (patch_ud,mask_ud), (patch_lr_ud,mask_lr_ud)])
     
     return data_aug
+
+def augment_rectangular(images, targets):
+    '''augument annotation masks with all combinations of flipping up&down and left&right
+
+    Inputs:
+        data : tuple[list]
+            list of patch images and masks [H,W,C]
+    
+    Outputs:
+        data_aug : tuple[list]
+            list of augmented patch images and masks
+
+    '''
+    
+    imgs_aug  = []
+    targets_aug = []
+    for patch,mask in zip(images, targets):
+        patch_ud = np.transpose(torch.flipud(patch))
+        mask_ud = np.transpose(torch.flipud(mask))
+        patch_lr = np.transpose(torch.fliplr(patch))
+        mask_lr =np.transpose(torch.fliplr(mask))
+        patch_lr_ud = np.transpose(torch.flipud(patch_lr))
+        mask_lr_ud = np.transpose(torch.flipud(mask_lr))
+        patch = np.transpose(patch, (2,0,1))
+
+        imgs_aug.extend([patch, patch_lr, patch_ud, patch_lr_ud])
+        targets_aug.extend([mask, mask_lr, mask_ud, mask_lr_ud])
+
+        # data_aug.extend([(patch,mask), (patch_lr,mask_lr), (patch_ud,mask_ud), (patch_lr_ud,mask_lr_ud)])
+    
+    return imgs_aug, targets_aug
 
 def save_patches(export_dir, data):
     '''Export patches and masks for model training

@@ -1,0 +1,53 @@
+{   
+    "training_parameters": {
+        "batch_size": 5,
+        "lr": 0.1,
+        "epochs": 100,
+        "load_pretrained": false,
+        "data_folder": "images_train",
+        "num_workers": 4,
+        "spdataset": true,
+        "train_with_sequences": false
+    },
+    "models_settings": {
+        "n_channels": 5,
+        "n_classes":3,
+        "resize_width": 512,
+        "equalize": true,
+        "patch_width": 128,
+        "patch_height": 128,
+        "stride_vertical": 64,
+        "stride_horizontal": 64,
+        "label_to_value": {
+            "_background_": 0, 
+            "flagellum": 1, 
+            "head": 2
+        },
+        "train_dir": "../data/patches_s128",
+        "test_dir": "../data/patches_s128",
+        "image_folder": "images",
+        "mask_folder": "masks"
+    },
+    "data_preprocessing": {
+        "use_augmentation": true,
+        "use_optical_flow": true,
+        "use_patches": true,
+        "optical_flow_function_name": "TVL1_iterative",
+        "frames_length": 9,
+        "slow_pathway_size": 3,
+        "fast_pathway_size": 1,
+        "slowfast_fusion_conv_stride": [4,1,1],
+        "head_pool_kernel_size0": [2, 7, 7],
+        "head_pool_kernel_size1": [8, 7, 7],
+        "slowfast_channel_reduction_ratio": [8],
+        "slowfast_conv_channel_fusion_ratio": 2,
+        "slowfast_fusion_conv_kernel_size": [7, 1, 1],
+        "model_depth": 18,
+        "model_num_class": 512,
+        "dropout_rate": 0,
+        "input_channels": 3,
+        "n_imgs": 3
+    }
+    
+}
+
