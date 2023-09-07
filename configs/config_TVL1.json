@@ -1,6 +1,7 @@
+
 {   
     "training_parameters": {
-        "batch_size": 2,
+        "batch_size": 6,
         "lr": 0.1,
         "epochs": 100,
         "load_pretrained": false,
@@ -8,12 +9,12 @@
         "spdataset": true,
         "use_augmentation": true,
         "use_optical_flow": true,
-        "use_patches": true,
+        "use_patches": false,
         "data_folder": "images_train",
         "sequence_length": 10
     },
     "models_settings": {
-        "n_channels": 3,
+        "n_channels": 5,
         "n_classes":3,
         "label_to_value": {
             "_background_": 0, 
@@ -27,7 +28,7 @@
         "patch_height": 128
     },
     "data_preprocessing": {
-        "optical_flow_function_name": "stack_and_get_middle_masks",
+        "optical_flow_function_name": "TVL1_iterative",
         "original_image_size": 512,
         "number_of_stacked_imgs": 3
     },

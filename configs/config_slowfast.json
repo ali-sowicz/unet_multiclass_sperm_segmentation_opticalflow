@@ -1,6 +1,8 @@
+
+
 {   
     "training_parameters": {
-        "batch_size": 2,
+        "batch_size": 6,
         "lr": 0.1,
         "epochs": 100,
         "load_pretrained": false,
@@ -8,12 +10,12 @@
         "spdataset": true,
         "use_augmentation": true,
         "use_optical_flow": true,
-        "use_patches": true,
+        "use_patches": false,
         "data_folder": "images_train",
         "sequence_length": 10
     },
     "models_settings": {
-        "n_channels": 3,
+        "n_channels": 4,
         "n_classes":3,
         "label_to_value": {
             "_background_": 0, 
@@ -27,17 +29,17 @@
         "patch_height": 128
     },
     "data_preprocessing": {
-        "optical_flow_function_name": "stack_and_get_middle_masks",
+        "optical_flow_function_name": "slowfast_images",
         "original_image_size": 512,
         "number_of_stacked_imgs": 3
     },
     "slowfast": {
-        "frames_length": 2,
-        "slow_pathway_size": 2,
+        "frames_length": 9,
+        "slow_pathway_size": 3,
         "fast_pathway_size": 1,
-        "slowfast_fusion_conv_stride": [2,1,1],
-        "head_pool_kernel_size0": [1, 7, 7],
-        "head_pool_kernel_size1": [2, 7, 7],
+        "slowfast_fusion_conv_stride": [4,1,1],
+        "head_pool_kernel_size0": [2, 7, 7],
+        "head_pool_kernel_size1": [8, 7, 7],
         "slowfast_channel_reduction_ratio": [8],
         "slowfast_conv_channel_fusion_ratio": 2,
         "slowfast_fusion_conv_kernel_size": [7, 1, 1],

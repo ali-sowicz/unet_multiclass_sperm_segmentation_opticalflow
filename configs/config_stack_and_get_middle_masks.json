@@ -1,6 +1,6 @@
 {   
     "training_parameters": {
-        "batch_size": 2,
+        "batch_size": 6,
         "lr": 0.1,
         "epochs": 100,
         "load_pretrained": false,
@@ -8,7 +8,7 @@
         "spdataset": true,
         "use_augmentation": true,
         "use_optical_flow": true,
-        "use_patches": true,
+        "use_patches": false,
         "data_folder": "images_train",
         "sequence_length": 10
     },

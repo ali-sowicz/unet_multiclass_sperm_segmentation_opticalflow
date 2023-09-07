@@ -49,3 +49,7 @@ def save_images(export_dir, data):
         
         img.save(save_image_path)
         mask.save(save_mask_path)
+
+def rgb_to_gray_tensor(rgb_tensor):
+        gray_tensor = 0.2989 * rgb_tensor[0] + 0.5870 * rgb_tensor[1] + 0.1140 * rgb_tensor[2]
+        return gray_tensor
